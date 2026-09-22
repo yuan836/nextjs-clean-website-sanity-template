@@ -127,6 +127,58 @@ export type Button = {
   link?: Link
 }
 
+export type HeroSlide = {
+  _id: string
+  _type: 'heroSlide'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  subtitle?: string
+  eyebrow?: string
+  image: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  mobileImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+  primaryAction?: {
+    label?: string
+    href?: string
+  }
+  secondaryAction?: {
+    label?: string
+    href?: string
+  }
+  order: number
+  enabled?: boolean
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
 export type Settings = {
   _id: string
   _type: 'settings'
@@ -165,22 +217,6 @@ export type Settings = {
     metadataBase?: string
     _type: 'image'
   }
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type Page = {
@@ -500,9 +536,10 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
-  | Settings
+  | HeroSlide
   | SanityImageCrop
   | SanityImageHotspot
+  | Settings
   | Page
   | PersonReference
   | Post
@@ -529,6 +566,39 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
+
+// Source: sanity/lib/queries.hero.ts
+// Variable: heroSlidesQuery
+// Query: *[_type == "heroSlide" && enabled != false && defined(image.asset)] | order(order asc, _createdAt asc) {    _id,    title,    subtitle,    eyebrow,    image,    mobileImage,    primaryAction,    secondaryAction  }
+export type HeroSlidesQueryResult = Array<{
+  _id: string
+  title: string
+  subtitle: string | null
+  eyebrow: string | null
+  image: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  mobileImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  } | null
+  primaryAction: {
+    label?: string
+    href?: string
+  } | null
+  secondaryAction: {
+    label?: string
+    href?: string
+  } | null
+}>
 
 // Source: sanity/lib/queries.ts
 // Variable: settingsQuery
@@ -817,6 +887,7 @@ export type PagesSlugsResult = Array<{
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
+    '\n  *[_type == "heroSlide" && enabled != false && defined(image.asset)] | order(order asc, _createdAt asc) {\n    _id,\n    title,\n    subtitle,\n    eyebrow,\n    image,\n    mobileImage,\n    primaryAction,\n    secondaryAction\n  }\n': HeroSlidesQueryResult
     '*[_type == "settings"][0]': SettingsQueryResult
     '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult
     '\n  *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
