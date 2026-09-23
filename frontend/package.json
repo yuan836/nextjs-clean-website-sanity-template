@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "prebuild": "sanity typegen generate",
-    "build": "next build --webpack",
+    "build": "next build",
     "predev": "npm run sanity:typegen",
     "dev": "next dev",
     "lint": "eslint .",
@@ -21,8 +21,8 @@
     "@vercel/speed-insights": "^2.0.0",
     "autoprefixer": "^10.5.0",
     "date-fns": "^4.4.0",
-    "next": "^16.3.6",
-    "next-sanity": "^13.0.8",
+    "next": "^15.5.26",
+    "next-sanity": "^11.6.13",
     "postcss": "^8.5.18",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
@@ -32,11 +32,12 @@
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
     "@types/node": "^22.19.19",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^16.3.6",
+    "eslint-config-next": "^15.5.26",
     "typescript": "^5.9.3"
   }
 }
