@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "prebuild": "sanity typegen generate",
-    "build": "next build",
+    "build": "next build --webpack",
     "predev": "npm run sanity:typegen",
     "dev": "next dev",
     "lint": "eslint .",
