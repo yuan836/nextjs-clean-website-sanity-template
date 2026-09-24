@@ -234,6 +234,20 @@ export const settings = defineType({
       description: '嵌入 Google 地圖要搜尋的地點，例如店家名稱或完整地址。留空會用上面的「地址」。',
     }),
     defineField({
+      name: 'mapCenter',
+      title: '地圖中心座標',
+      type: 'string',
+      group: 'contact',
+      description:
+        '選填，格式「緯度, 經度」，例如「25.0675657, 121.5526993」。紅標沒在正中間時再填：在 Google 地圖對紅標按右鍵，點第一行的座標即可複製。',
+      validation: (rule) =>
+        rule.custom((value) =>
+          !value || /^\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*$/.test(value)
+            ? true
+            : '格式要是「緯度, 經度」，例如 25.0675657, 121.5526993',
+        ),
+    }),
+    defineField({
       name: 'mapImage',
       title: '地圖圖片',
       type: 'image',

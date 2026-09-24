@@ -422,6 +422,8 @@ export type Settings = {
   lineId?: string
   lineUrl?: string
   hours?: string
+  mapQuery?: string
+  mapCenter?: string
   mapImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
