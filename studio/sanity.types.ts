@@ -127,6 +127,114 @@ export type Button = {
   link?: Link
 }
 
+export type Album = {
+  _id: string
+  _type: 'album'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  date: string
+  photos?: Array<{
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: 'image'
+    _key: string
+  }>
+  showOnHome?: boolean
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
+export type CourseReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'course'
+}
+
+export type Teacher = {
+  _id: string
+  _type: 'teacher'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name: string
+  subject: string
+  photo?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  credential?: string
+  years?: string
+  philosophy?: string
+  classes?: Array<
+    {
+      _key: string
+    } & CourseReference
+  >
+  experience?: Array<string>
+  order?: number
+}
+
+export type Course = {
+  _id: string
+  _type: 'course'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name: string
+  slug: Slug
+  level: 'elementary' | 'junior' | 'senior'
+  subject: 'chinese' | 'english' | 'math' | 'science' | 'social'
+  image?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  summary?: string
+  schedule?: string
+  classSize?: string
+  duration?: string
+  term?: string
+  outline?: Array<string>
+  featured?: boolean
+  order?: number
+  ctaLabel?: string
+  ctaHref?: string
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
 export type News = {
   _id: string
   _type: 'news'
@@ -149,28 +257,6 @@ export type News = {
   body?: BlockContent
   ctaLabel?: string
   ctaHref?: string
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
-}
-
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
 }
 
 export type HeroSlide = {
@@ -209,6 +295,76 @@ export type HeroSlide = {
   enabled?: boolean
 }
 
+export type AboutPage = {
+  _id: string
+  _type: 'aboutPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heroImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  title: string
+  philosophy?: BlockContent
+  features?: Array<{
+    title: string
+    body?: string
+    _type: 'feature'
+    _key: string
+  }>
+  facilities?: Array<{
+    image?: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    }
+    title: string
+    body?: string
+    _type: 'facility'
+    _key: string
+  }>
+}
+
+export type HomePage = {
+  _id: string
+  _type: 'homePage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  resultsTitle?: string
+  resultsNote?: string
+  schools?: Array<{
+    name: string
+    count: number
+    _type: 'schoolResult'
+    _key: string
+  }>
+  resultsCaption?: string
+  teaserHeading?: string
+  teaserBody?: string
+  teaserImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  teaserButton?: string
+  newsLimit?: number
+  coursesLimit?: number
+  albumLimit?: number
+  showResults?: boolean
+}
+
 export type Settings = {
   _id: string
   _type: 'settings'
@@ -216,6 +372,16 @@ export type Settings = {
   _updatedAt: string
   _rev: string
   title: string
+  subtitle?: string
+  logo?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  footerTagline?: string
   description?: Array<{
     children?: Array<{
       marks?: Array<string>
@@ -247,6 +413,22 @@ export type Settings = {
     metadataBase?: string
     _type: 'image'
   }
+  phone?: string
+  address?: string
+  lineId?: string
+  lineUrl?: string
+  hours?: string
+  mapImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  mapUrl?: string
+  callBarTitle?: string
+  callBarNote?: string
 }
 
 export type Page = {
@@ -560,11 +742,17 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
-  | News
+  | Album
   | SanityImageCrop
   | SanityImageHotspot
+  | CourseReference
+  | Teacher
+  | Course
   | Slug
+  | News
   | HeroSlide
+  | AboutPage
+  | HomePage
   | Settings
   | Page
   | PersonReference

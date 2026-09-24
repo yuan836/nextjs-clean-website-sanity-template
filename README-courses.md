@@ -8,7 +8,7 @@
 |---|---|
 | 新增 | `studio/src/schemaTypes/documents/course.ts` |
 | 修改 | `studio/src/schemaTypes/index.ts`（加入 `course`，已含 `heroSlide`、`news`） |
-| 修改 | `frontend/sanity/lib/queries.ts`（貼上 `queries.course.ts` 的 `courseFields`、`allCoursesQuery`、`featuredCoursesQuery`） |
+| 新增 | `frontend/sanity/lib/queries.course.ts`（`courseFields`、`allCoursesQuery`、`featuredCoursesQuery`，import 時要寫 `@/sanity/lib/queries.course`） |
 | 新增 | `frontend/app/components/courses/types.ts`（學齡／科目選項與型別） |
 | 新增 | `frontend/app/components/courses/toCourseView.ts` |
 | 新增 | `frontend/app/components/courses/CourseCard.tsx` |

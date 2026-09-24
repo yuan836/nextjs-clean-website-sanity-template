@@ -127,6 +127,78 @@ export type Button = {
   link?: Link
 }
 
+export type Album = {
+  _id: string
+  _type: 'album'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  date: string
+  photos?: Array<{
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: 'image'
+    _key: string
+  }>
+  showOnHome?: boolean
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
+export type CourseReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'course'
+}
+
+export type Teacher = {
+  _id: string
+  _type: 'teacher'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name: string
+  subject: string
+  photo?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  credential?: string
+  years?: string
+  philosophy?: string
+  classes?: Array<
+    {
+      _key: string
+    } & CourseReference
+  >
+  experience?: Array<string>
+  order?: number
+}
+
 export type Course = {
   _id: string
   _type: 'course'
@@ -155,22 +227,6 @@ export type Course = {
   order?: number
   ctaLabel?: string
   ctaHref?: string
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type Slug = {
@@ -239,6 +295,76 @@ export type HeroSlide = {
   enabled?: boolean
 }
 
+export type AboutPage = {
+  _id: string
+  _type: 'aboutPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heroImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  title: string
+  philosophy?: BlockContent
+  features?: Array<{
+    title: string
+    body?: string
+    _type: 'feature'
+    _key: string
+  }>
+  facilities?: Array<{
+    image?: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    }
+    title: string
+    body?: string
+    _type: 'facility'
+    _key: string
+  }>
+}
+
+export type HomePage = {
+  _id: string
+  _type: 'homePage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  resultsTitle?: string
+  resultsNote?: string
+  schools?: Array<{
+    name: string
+    count: number
+    _type: 'schoolResult'
+    _key: string
+  }>
+  resultsCaption?: string
+  teaserHeading?: string
+  teaserBody?: string
+  teaserImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  teaserButton?: string
+  newsLimit?: number
+  coursesLimit?: number
+  albumLimit?: number
+  showResults?: boolean
+}
+
 export type Settings = {
   _id: string
   _type: 'settings'
@@ -246,6 +372,16 @@ export type Settings = {
   _updatedAt: string
   _rev: string
   title: string
+  subtitle?: string
+  logo?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  footerTagline?: string
   description?: Array<{
     children?: Array<{
       marks?: Array<string>
@@ -277,6 +413,22 @@ export type Settings = {
     metadataBase?: string
     _type: 'image'
   }
+  phone?: string
+  address?: string
+  lineId?: string
+  lineUrl?: string
+  hours?: string
+  mapImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  mapUrl?: string
+  callBarTitle?: string
+  callBarNote?: string
 }
 
 export type Page = {
@@ -590,12 +742,17 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
-  | Course
+  | Album
   | SanityImageCrop
   | SanityImageHotspot
+  | CourseReference
+  | Teacher
+  | Course
   | Slug
   | News
   | HeroSlide
+  | AboutPage
+  | HomePage
   | Settings
   | Page
   | PersonReference
@@ -622,6 +779,95 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
+
+// Source: sanity/lib/queries.about.ts
+// Variable: aboutPageQuery
+// Query: *[_type == "aboutPage" && _id == "aboutPage"][0] {    title,    heroImage,    philosophy,    features[] { _key, title, body },    facilities[] { _key, title, body, image }  }
+export type AboutPageQueryResult = {
+  title: string
+  heroImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  philosophy: BlockContent | null
+  features: Array<{
+    _key: string
+    title: string
+    body: string | null
+  }> | null
+  facilities: Array<{
+    _key: string
+    title: string
+    body: string | null
+    image: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    } | null
+  }> | null
+} | null
+
+// Source: sanity/lib/queries.about.ts
+// Variable: teachersQuery
+// Query: *[_type == "teacher"] | order(order asc, name asc) {    _id,    name,    subject,    photo,    credential,    years,    philosophy,    "classes": classes[]->name,    experience  }
+export type TeachersQueryResult = Array<{
+  _id: string
+  name: string
+  subject: string
+  photo: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  credential: string | null
+  years: string | null
+  philosophy: string | null
+  classes: Array<string> | null
+  experience: Array<string> | null
+}>
+
+// Source: sanity/lib/queries.album.ts
+// Variable: albumsQuery
+// Query: *[_type == "album" && count(photos) > 0] | order(date desc) {    _id,    title,    date,    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }  }
+export type AlbumsQueryResult = Array<{
+  _id: string
+  title: string
+  date: string
+  photos: Array<{
+    _key: string
+    asset: SanityImageAssetReference
+    hotspot: SanityImageHotspot | null
+    crop: SanityImageCrop | null
+    alt: string | null
+    caption: string | null
+  }> | null
+}>
+
+// Source: sanity/lib/queries.album.ts
+// Variable: homeAlbumPeekQuery
+// Query: *[_type == "album" && showOnHome != false && count(photos) > 0] | order(date desc) [0...3] {    _id,    title,    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }  }
+export type HomeAlbumPeekQueryResult = Array<{
+  _id: string
+  title: string
+  photos: Array<{
+    _key: string
+    asset: SanityImageAssetReference
+    hotspot: SanityImageHotspot | null
+    crop: SanityImageCrop | null
+    alt: string | null
+    caption: string | null
+  }> | null
+}>
 
 // Source: sanity/lib/queries.course.ts
 // Variable: allCoursesQuery
@@ -710,6 +956,35 @@ export type HeroSlidesQueryResult = Array<{
   } | null
 }>
 
+// Source: sanity/lib/queries.home.ts
+// Variable: homePageQuery
+// Query: *[_type == "homePage" && _id == "homePage"][0] {    resultsTitle,    resultsNote,    resultsCaption,    "schools": schools[] { _key, name, count },    teaserHeading,    teaserBody,    teaserImage,    teaserButton,    newsLimit,    coursesLimit,    albumLimit,    showResults  }
+export type HomePageQueryResult = {
+  resultsTitle: string | null
+  resultsNote: string | null
+  resultsCaption: string | null
+  schools: Array<{
+    _key: string
+    name: string
+    count: number
+  }> | null
+  teaserHeading: string | null
+  teaserBody: string | null
+  teaserImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  teaserButton: string | null
+  newsLimit: number | null
+  coursesLimit: number | null
+  albumLimit: number | null
+  showResults: boolean | null
+} | null
+
 // Source: sanity/lib/queries.news.ts
 // Variable: latestNewsQuery
 // Query: *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(date desc) [0...$limit] {    _id,    title,    "slug": slug.current,    tag,    date,    coverImage,    excerpt,    body,    ctaLabel,    ctaHref  }
@@ -743,6 +1018,16 @@ export type SettingsQueryResult = {
   _updatedAt: string
   _rev: string
   title: string
+  subtitle?: string
+  logo?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  footerTagline?: string
   description?: Array<{
     children?: Array<{
       marks?: Array<string>
@@ -774,6 +1059,22 @@ export type SettingsQueryResult = {
     metadataBase?: string
     _type: 'image'
   }
+  phone?: string
+  address?: string
+  lineId?: string
+  lineUrl?: string
+  hours?: string
+  mapImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  mapUrl?: string
+  callBarTitle?: string
+  callBarNote?: string
 } | null
 
 // Source: sanity/lib/queries.ts
@@ -1020,9 +1321,14 @@ export type PagesSlugsResult = Array<{
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
+    '\n  *[_type == "aboutPage" && _id == "aboutPage"][0] {\n    title,\n    heroImage,\n    philosophy,\n    features[] { _key, title, body },\n    facilities[] { _key, title, body, image }\n  }\n': AboutPageQueryResult
+    '\n  *[_type == "teacher"] | order(order asc, name asc) {\n    _id,\n    name,\n    subject,\n    photo,\n    credential,\n    years,\n    philosophy,\n    "classes": classes[]->name,\n    experience\n  }\n': TeachersQueryResult
+    '\n  *[_type == "album" && count(photos) > 0] | order(date desc) {\n    _id,\n    title,\n    date,\n    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }\n  }\n': AlbumsQueryResult
+    '\n  *[_type == "album" && showOnHome != false && count(photos) > 0] | order(date desc) [0...3] {\n    _id,\n    title,\n    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }\n  }\n': HomeAlbumPeekQueryResult
     '\n  *[_type == "course" && defined(slug.current)] | order(order asc, name asc) {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': AllCoursesQueryResult
     '\n  *[_type == "course" && featured == true && defined(slug.current)] | order(order asc) [0...$limit] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': FeaturedCoursesQueryResult
     '\n  *[_type == "heroSlide" && enabled != false && defined(image.asset)] | order(order asc, _createdAt asc) {\n    _id,\n    title,\n    subtitle,\n    eyebrow,\n    image,\n    mobileImage,\n    primaryAction,\n    secondaryAction\n  }\n': HeroSlidesQueryResult
+    '\n  *[_type == "homePage" && _id == "homePage"][0] {\n    resultsTitle,\n    resultsNote,\n    resultsCaption,\n    "schools": schools[] { _key, name, count },\n    teaserHeading,\n    teaserBody,\n    teaserImage,\n    teaserButton,\n    newsLimit,\n    coursesLimit,\n    albumLimit,\n    showResults\n  }\n': HomePageQueryResult
     '\n  *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(date desc) [0...$limit] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    date,\n    coverImage,\n    excerpt,\n    body,\n    ctaLabel,\n    ctaHref\n  }\n': LatestNewsQueryResult
     '*[_type == "settings"][0]': SettingsQueryResult
     '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult

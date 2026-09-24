@@ -8,7 +8,7 @@
 |---|---|
 | 新增 | `studio/src/schemaTypes/documents/news.ts` |
 | 修改 | `studio/src/schemaTypes/index.ts`（加入 `news`，已含上一批的 `heroSlide`） |
-| 修改 | `frontend/sanity/lib/queries.ts`（貼上 `queries.news.ts` 的 `latestNewsQuery`） |
+| 新增 | `frontend/sanity/lib/queries.news.ts`（`latestNewsQuery`，import 時要寫 `@/sanity/lib/queries.news`） |
 | 新增 | `frontend/app/components/Modal.tsx`（共用外框，之後師資／課程也用） |
 | 新增 | `frontend/app/components/news/types.ts` |
 | 新增 | `frontend/app/components/news/NewsCard.tsx` |
