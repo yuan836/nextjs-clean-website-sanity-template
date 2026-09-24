@@ -127,6 +127,43 @@ export type Button = {
   link?: Link
 }
 
+export type Album = {
+  _id: string
+  _type: 'album'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  date: string
+  photos?: Array<{
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: 'image'
+    _key: string
+  }>
+  showOnHome?: boolean
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
 export type CourseReference = {
   _ref: string
   _type: 'reference'
@@ -160,22 +197,6 @@ export type Teacher = {
   >
   experience?: Array<string>
   order?: number
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type Course = {
@@ -663,10 +684,11 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
-  | CourseReference
-  | Teacher
+  | Album
   | SanityImageCrop
   | SanityImageHotspot
+  | CourseReference
+  | Teacher
   | Course
   | Slug
   | News
@@ -753,6 +775,39 @@ export type TeachersQueryResult = Array<{
   philosophy: string | null
   classes: Array<string> | null
   experience: Array<string> | null
+}>
+
+// Source: sanity/lib/queries.album.ts
+// Variable: albumsQuery
+// Query: *[_type == "album" && count(photos) > 0] | order(date desc) {    _id,    title,    date,    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }  }
+export type AlbumsQueryResult = Array<{
+  _id: string
+  title: string
+  date: string
+  photos: Array<{
+    _key: string
+    asset: SanityImageAssetReference
+    hotspot: SanityImageHotspot | null
+    crop: SanityImageCrop | null
+    alt: string | null
+    caption: string | null
+  }> | null
+}>
+
+// Source: sanity/lib/queries.album.ts
+// Variable: homeAlbumPeekQuery
+// Query: *[_type == "album" && showOnHome != false && count(photos) > 0] | order(date desc) [0...3] {    _id,    title,    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }  }
+export type HomeAlbumPeekQueryResult = Array<{
+  _id: string
+  title: string
+  photos: Array<{
+    _key: string
+    asset: SanityImageAssetReference
+    hotspot: SanityImageHotspot | null
+    crop: SanityImageCrop | null
+    alt: string | null
+    caption: string | null
+  }> | null
 }>
 
 // Source: sanity/lib/queries.course.ts
@@ -1154,6 +1209,8 @@ declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[_type == "aboutPage" && _id == "aboutPage"][0] {\n    title,\n    heroImage,\n    philosophy,\n    features[] { _key, title, body },\n    facilities[] { _key, title, body, image }\n  }\n': AboutPageQueryResult
     '\n  *[_type == "teacher"] | order(order asc, name asc) {\n    _id,\n    name,\n    subject,\n    photo,\n    credential,\n    years,\n    philosophy,\n    "classes": classes[]->name,\n    experience\n  }\n': TeachersQueryResult
+    '\n  *[_type == "album" && count(photos) > 0] | order(date desc) {\n    _id,\n    title,\n    date,\n    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }\n  }\n': AlbumsQueryResult
+    '\n  *[_type == "album" && showOnHome != false && count(photos) > 0] | order(date desc) [0...3] {\n    _id,\n    title,\n    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }\n  }\n': HomeAlbumPeekQueryResult
     '\n  *[_type == "course" && defined(slug.current)] | order(order asc, name asc) {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': AllCoursesQueryResult
     '\n  *[_type == "course" && featured == true && defined(slug.current)] | order(order asc) [0...$limit] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': FeaturedCoursesQueryResult
     '\n  *[_type == "heroSlide" && enabled != false && defined(image.asset)] | order(order asc, _createdAt asc) {\n    _id,\n    title,\n    subtitle,\n    eyebrow,\n    image,\n    mobileImage,\n    primaryAction,\n    secondaryAction\n  }\n': HeroSlidesQueryResult

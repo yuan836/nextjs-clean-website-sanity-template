@@ -1,3 +1,5 @@
+import type {AllCoursesQueryResult} from '@/sanity.types'
+
 export const LEVELS = [
   {label: '國小', value: 'elementary'},
   {label: '國中', value: 'junior'},
@@ -32,3 +34,6 @@ export type CourseView = {
   ctaLabel?: string | null
   ctaHref?: string | null
 }
+
+// allCoursesQuery and featuredCoursesQuery share the same projection, so one row type covers both.
+export type CourseRow = AllCoursesQueryResult[number]

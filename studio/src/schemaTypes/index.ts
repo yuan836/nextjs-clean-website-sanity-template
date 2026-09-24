@@ -5,6 +5,7 @@ import {heroSlide} from './documents/heroSlide'
 import {news} from './documents/news'
 import {course} from './documents/course'
 import {teacher} from './documents/teacher'
+import {album} from './documents/album'
 import {callToAction} from './objects/callToAction'
 import {infoSection} from './objects/infoSection'
 import {settings} from './singletons/settings'
@@ -28,6 +29,7 @@ export const schemaTypes = [
   news,
   course,
   teacher,
+  album,
   // Objects
   button,
   blockContent,
