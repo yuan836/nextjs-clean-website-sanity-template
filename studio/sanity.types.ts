@@ -127,6 +127,43 @@ export type Button = {
   link?: Link
 }
 
+export type Album = {
+  _id: string
+  _type: 'album'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  date: string
+  photos?: Array<{
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: 'image'
+    _key: string
+  }>
+  showOnHome?: boolean
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
 export type CourseReference = {
   _ref: string
   _type: 'reference'
@@ -160,22 +197,6 @@ export type Teacher = {
   >
   experience?: Array<string>
   order?: number
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type Course = {
@@ -319,6 +340,16 @@ export type Settings = {
   _updatedAt: string
   _rev: string
   title: string
+  subtitle?: string
+  logo?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  footerTagline?: string
   description?: Array<{
     children?: Array<{
       marks?: Array<string>
@@ -350,6 +381,22 @@ export type Settings = {
     metadataBase?: string
     _type: 'image'
   }
+  phone?: string
+  address?: string
+  lineId?: string
+  lineUrl?: string
+  hours?: string
+  mapImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  mapUrl?: string
+  callBarTitle?: string
+  callBarNote?: string
 }
 
 export type Page = {
@@ -663,10 +710,11 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
-  | CourseReference
-  | Teacher
+  | Album
   | SanityImageCrop
   | SanityImageHotspot
+  | CourseReference
+  | Teacher
   | Course
   | Slug
   | News

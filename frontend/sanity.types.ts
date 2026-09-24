@@ -340,6 +340,16 @@ export type Settings = {
   _updatedAt: string
   _rev: string
   title: string
+  subtitle?: string
+  logo?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  footerTagline?: string
   description?: Array<{
     children?: Array<{
       marks?: Array<string>
@@ -371,6 +381,22 @@ export type Settings = {
     metadataBase?: string
     _type: 'image'
   }
+  phone?: string
+  address?: string
+  lineId?: string
+  lineUrl?: string
+  hours?: string
+  mapImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  mapUrl?: string
+  callBarTitle?: string
+  callBarNote?: string
 }
 
 export type Page = {
@@ -930,6 +956,16 @@ export type SettingsQueryResult = {
   _updatedAt: string
   _rev: string
   title: string
+  subtitle?: string
+  logo?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  footerTagline?: string
   description?: Array<{
     children?: Array<{
       marks?: Array<string>
@@ -961,6 +997,22 @@ export type SettingsQueryResult = {
     metadataBase?: string
     _type: 'image'
   }
+  phone?: string
+  address?: string
+  lineId?: string
+  lineUrl?: string
+  hours?: string
+  mapImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  mapUrl?: string
+  callBarTitle?: string
+  callBarNote?: string
 } | null
 
 // Source: sanity/lib/queries.ts

@@ -7,6 +7,9 @@ import * as demo from '../../lib/initialValues'
 /**
  * Settings schema Singleton.  Singletons are single documents that are displayed not in a collection, handy for things like site settings and other global configurations.
  * Learn more: https://www.sanity.io/docs/create-a-link-to-a-single-edit-page-in-your-main-document-type-list
+ *
+ * Academy additions: brand (logo / name), contact info, map and the sticky call bar copy.
+ * These live in their own groups so the original template fields stay untouched.
  */
 
 export const settings = defineType({
@@ -14,20 +17,50 @@ export const settings = defineType({
   title: 'Settings',
   type: 'document',
   icon: CogIcon,
+  groups: [
+    {name: 'brand', title: '品牌', default: true},
+    {name: 'contact', title: '聯絡資訊'},
+    {name: 'callBar', title: '底部諮詢條'},
+    {name: 'seo', title: 'SEO'},
+  ],
   fields: [
     defineField({
       name: 'title',
-      description: 'This field is the title of your blog.',
+      description: '網站名稱，也會出現在導覽列與瀏覽器分頁標題。',
       title: 'Title',
       type: 'string',
+      group: 'brand',
       initialValue: demo.title,
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'subtitle',
+      title: '英文副標',
+      type: 'string',
+      group: 'brand',
+      description: '導覽列校名下方的小字，例如「Academy」。',
+    }),
+    defineField({
+      name: 'logo',
+      title: 'Logo',
+      type: 'image',
+      group: 'brand',
+      description: '正方形，建議 SVG 或透明背景 PNG。留空則顯示「LOGO」佔位。',
+      fields: [{name: 'alt', type: 'string', title: '替代文字'}],
+    }),
+    defineField({
+      name: 'footerTagline',
+      title: '頁尾標語',
+      type: 'string',
+      group: 'brand',
+      description: '例如「國小・國中・高中全科輔導」。',
     }),
     defineField({
       name: 'description',
       description: 'Used on the Homepage',
       title: 'Description',
       type: 'array',
+      group: 'seo',
       initialValue: demo.description,
       of: [
         // Define a minified block content field for the description. https://www.sanity.io/docs/block-content
@@ -119,6 +152,7 @@ export const settings = defineType({
       name: 'ogImage',
       title: 'Open Graph Image',
       type: 'image',
+      group: 'seo',
       description: 'Displayed on social cards and search engine results.',
       options: {
         hotspot: true,
@@ -155,6 +189,74 @@ export const settings = defineType({
           ),
         }),
       ],
+    }),
+
+    // ---- 聯絡資訊 ----
+    defineField({
+      name: 'phone',
+      title: '電話',
+      type: 'string',
+      group: 'contact',
+      description: '顯示用格式，例如「04-0000-0000」。撥號連結會自動去掉符號。',
+    }),
+    defineField({
+      name: 'address',
+      title: '地址',
+      type: 'string',
+      group: 'contact',
+    }),
+    defineField({
+      name: 'lineId',
+      title: 'LINE ID',
+      type: 'string',
+      group: 'contact',
+      description: '例如「@academy」。',
+    }),
+    defineField({
+      name: 'lineUrl',
+      title: 'LINE 加好友連結',
+      type: 'url',
+      group: 'contact',
+      description: '可留空；有填的話 LINE ID 會變成可點的連結。',
+    }),
+    defineField({
+      name: 'hours',
+      title: '營業時間',
+      type: 'string',
+      group: 'contact',
+      description: '例如「週一至週六 13:00–21:30／週日休」。',
+    }),
+    defineField({
+      name: 'mapImage',
+      title: '地圖圖片',
+      type: 'image',
+      group: 'contact',
+      description: '地圖截圖；之後可改成嵌入 Google 地圖。',
+      options: {hotspot: true},
+      fields: [{name: 'alt', type: 'string', title: '替代文字'}],
+    }),
+    defineField({
+      name: 'mapUrl',
+      title: 'Google 地圖連結',
+      type: 'url',
+      group: 'contact',
+      description: '有填的話點地圖會開啟導航。',
+    }),
+
+    // ---- 底部諮詢條 ----
+    defineField({
+      name: 'callBarTitle',
+      title: '諮詢條標題',
+      type: 'string',
+      group: 'callBar',
+      initialValue: '免費學習診斷諮詢',
+    }),
+    defineField({
+      name: 'callBarNote',
+      title: '諮詢條副標',
+      type: 'string',
+      group: 'callBar',
+      description: '留空則顯示營業時間。',
     }),
   ],
   preview: {
