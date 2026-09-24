@@ -333,6 +333,38 @@ export type AboutPage = {
   }>
 }
 
+export type HomePage = {
+  _id: string
+  _type: 'homePage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  resultsTitle?: string
+  resultsNote?: string
+  schools?: Array<{
+    name: string
+    count: number
+    _type: 'schoolResult'
+    _key: string
+  }>
+  resultsCaption?: string
+  teaserHeading?: string
+  teaserBody?: string
+  teaserImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  teaserButton?: string
+  newsLimit?: number
+  coursesLimit?: number
+  albumLimit?: number
+  showResults?: boolean
+}
+
 export type Settings = {
   _id: string
   _type: 'settings'
@@ -720,6 +752,7 @@ export type AllSanitySchemaTypes =
   | News
   | HeroSlide
   | AboutPage
+  | HomePage
   | Settings
   | Page
   | PersonReference
@@ -922,6 +955,35 @@ export type HeroSlidesQueryResult = Array<{
     href?: string
   } | null
 }>
+
+// Source: sanity/lib/queries.home.ts
+// Variable: homePageQuery
+// Query: *[_type == "homePage" && _id == "homePage"][0] {    resultsTitle,    resultsNote,    resultsCaption,    "schools": schools[] { _key, name, count },    teaserHeading,    teaserBody,    teaserImage,    teaserButton,    newsLimit,    coursesLimit,    albumLimit,    showResults  }
+export type HomePageQueryResult = {
+  resultsTitle: string | null
+  resultsNote: string | null
+  resultsCaption: string | null
+  schools: Array<{
+    _key: string
+    name: string
+    count: number
+  }> | null
+  teaserHeading: string | null
+  teaserBody: string | null
+  teaserImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  teaserButton: string | null
+  newsLimit: number | null
+  coursesLimit: number | null
+  albumLimit: number | null
+  showResults: boolean | null
+} | null
 
 // Source: sanity/lib/queries.news.ts
 // Variable: latestNewsQuery
@@ -1266,6 +1328,7 @@ declare module '@sanity/client' {
     '\n  *[_type == "course" && defined(slug.current)] | order(order asc, name asc) {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': AllCoursesQueryResult
     '\n  *[_type == "course" && featured == true && defined(slug.current)] | order(order asc) [0...$limit] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': FeaturedCoursesQueryResult
     '\n  *[_type == "heroSlide" && enabled != false && defined(image.asset)] | order(order asc, _createdAt asc) {\n    _id,\n    title,\n    subtitle,\n    eyebrow,\n    image,\n    mobileImage,\n    primaryAction,\n    secondaryAction\n  }\n': HeroSlidesQueryResult
+    '\n  *[_type == "homePage" && _id == "homePage"][0] {\n    resultsTitle,\n    resultsNote,\n    resultsCaption,\n    "schools": schools[] { _key, name, count },\n    teaserHeading,\n    teaserBody,\n    teaserImage,\n    teaserButton,\n    newsLimit,\n    coursesLimit,\n    albumLimit,\n    showResults\n  }\n': HomePageQueryResult
     '\n  *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(date desc) [0...$limit] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    date,\n    coverImage,\n    excerpt,\n    body,\n    ctaLabel,\n    ctaHref\n  }\n': LatestNewsQueryResult
     '*[_type == "settings"][0]': SettingsQueryResult
     '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult

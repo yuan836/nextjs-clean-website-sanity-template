@@ -27,6 +27,20 @@ export const album = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'pinned',
+      title: '置頂',
+      type: 'boolean',
+      description: '勾選後排在最前面（相簿頁與首頁預覽都適用）；多本置頂時依「置頂順序」排。',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'pinOrder',
+      title: '置頂順序',
+      type: 'number',
+      description: '數字小的在前，只有勾選置頂時才需要填。',
+      hidden: ({document}) => !document?.pinned,
+    }),
+    defineField({
       name: 'photos',
       title: '照片',
       type: 'array',

@@ -10,6 +10,7 @@ import {callToAction} from './objects/callToAction'
 import {infoSection} from './objects/infoSection'
 import {settings} from './singletons/settings'
 import {aboutPage} from './singletons/aboutPage'
+import {homePage} from './singletons/homePage'
 import {link} from './objects/link'
 import {blockContent} from './objects/blockContent'
 import button from './objects/button'
@@ -20,6 +21,7 @@ import {blockContentTextOnly} from './objects/blockContentTextOnly'
 export const schemaTypes = [
   // Singletons
   settings,
+  homePage,
   aboutPage,
   // Documents
   page,
