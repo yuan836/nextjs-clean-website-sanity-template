@@ -8,21 +8,23 @@
 |---|---|
 | 新增 | `studio/src/schemaTypes/documents/heroSlide.ts` |
 | 修改 | `studio/src/schemaTypes/index.ts`（加入 `heroSlide`） |
-| 修改 | `frontend/sanity/lib/queries.ts`（貼上 `queries.hero.ts` 的 `heroSlidesQuery`） |
-| 新增 | `frontend/app/components/HeroCarousel.tsx`（client，互動） |
-| 新增 | `frontend/app/components/Hero.tsx`（server，抓資料） |
-
-`queries.hero.ts` 只是給你複製用的片段，不要整個檔案放進 repo — 把裡面的 `heroSlidesQuery` 貼到既有的 `queries.ts` 尾端（該檔已經 import 過 `defineQuery`）。
+| 新增 | `frontend/sanity/lib/queries.hero.ts`（`heroSlidesQuery`） |
+| 新增 | `frontend/app/components/hero/HeroSection.tsx`（server，抓資料） |
+| 新增 | `frontend/app/components/hero/HeroCarousel.tsx`（client，輪播邏輯） |
+| 新增 | `frontend/app/components/hero/HeroSlideContent.tsx`（文字與按鈕） |
+| 新增 | `frontend/app/components/hero/HeroActionLink.tsx`（CTA 按鈕） |
+| 新增 | `frontend/app/components/hero/HeroDots.tsx`（分頁點） |
+| 新增 | `frontend/app/components/hero/types.ts`（`HeroSlideView`） |
 
 ## 使用
 
 在 `frontend/app/page.tsx` 最上方放：
 
 ```tsx
-import Hero from './components/Hero'
+import HeroSection from './components/hero/HeroSection'
 
 // ...
-<Hero />
+<HeroSection />
 ```
 
 ## Schema 欄位
