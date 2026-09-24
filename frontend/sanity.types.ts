@@ -127,6 +127,57 @@ export type Button = {
   link?: Link
 }
 
+export type CourseReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'course'
+}
+
+export type Teacher = {
+  _id: string
+  _type: 'teacher'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name: string
+  subject: string
+  photo?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  credential?: string
+  years?: string
+  philosophy?: string
+  classes?: Array<
+    {
+      _key: string
+    } & CourseReference
+  >
+  experience?: Array<string>
+  order?: number
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
 export type Course = {
   _id: string
   _type: 'course'
@@ -155,22 +206,6 @@ export type Course = {
   order?: number
   ctaLabel?: string
   ctaHref?: string
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type Slug = {
@@ -237,6 +272,44 @@ export type HeroSlide = {
   }
   order: number
   enabled?: boolean
+}
+
+export type AboutPage = {
+  _id: string
+  _type: 'aboutPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heroImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  title: string
+  philosophy?: BlockContent
+  features?: Array<{
+    title: string
+    body?: string
+    _type: 'feature'
+    _key: string
+  }>
+  facilities?: Array<{
+    image?: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    }
+    title: string
+    body?: string
+    _type: 'facility'
+    _key: string
+  }>
 }
 
 export type Settings = {
@@ -590,12 +663,15 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
-  | Course
+  | CourseReference
+  | Teacher
   | SanityImageCrop
   | SanityImageHotspot
+  | Course
   | Slug
   | News
   | HeroSlide
+  | AboutPage
   | Settings
   | Page
   | PersonReference
@@ -622,6 +698,62 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
+
+// Source: sanity/lib/queries.about.ts
+// Variable: aboutPageQuery
+// Query: *[_type == "aboutPage" && _id == "aboutPage"][0] {    title,    heroImage,    philosophy,    features[] { _key, title, body },    facilities[] { _key, title, body, image }  }
+export type AboutPageQueryResult = {
+  title: string
+  heroImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  philosophy: BlockContent | null
+  features: Array<{
+    _key: string
+    title: string
+    body: string | null
+  }> | null
+  facilities: Array<{
+    _key: string
+    title: string
+    body: string | null
+    image: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    } | null
+  }> | null
+} | null
+
+// Source: sanity/lib/queries.about.ts
+// Variable: teachersQuery
+// Query: *[_type == "teacher"] | order(order asc, name asc) {    _id,    name,    subject,    photo,    credential,    years,    philosophy,    "classes": classes[]->name,    experience  }
+export type TeachersQueryResult = Array<{
+  _id: string
+  name: string
+  subject: string
+  photo: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  credential: string | null
+  years: string | null
+  philosophy: string | null
+  classes: Array<string> | null
+  experience: Array<string> | null
+}>
 
 // Source: sanity/lib/queries.course.ts
 // Variable: allCoursesQuery
@@ -1020,6 +1152,8 @@ export type PagesSlugsResult = Array<{
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
+    '\n  *[_type == "aboutPage" && _id == "aboutPage"][0] {\n    title,\n    heroImage,\n    philosophy,\n    features[] { _key, title, body },\n    facilities[] { _key, title, body, image }\n  }\n': AboutPageQueryResult
+    '\n  *[_type == "teacher"] | order(order asc, name asc) {\n    _id,\n    name,\n    subject,\n    photo,\n    credential,\n    years,\n    philosophy,\n    "classes": classes[]->name,\n    experience\n  }\n': TeachersQueryResult
     '\n  *[_type == "course" && defined(slug.current)] | order(order asc, name asc) {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': AllCoursesQueryResult
     '\n  *[_type == "course" && featured == true && defined(slug.current)] | order(order asc) [0...$limit] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': FeaturedCoursesQueryResult
     '\n  *[_type == "heroSlide" && enabled != false && defined(image.asset)] | order(order asc, _createdAt asc) {\n    _id,\n    title,\n    subtitle,\n    eyebrow,\n    image,\n    mobileImage,\n    primaryAction,\n    secondaryAction\n  }\n': HeroSlidesQueryResult
