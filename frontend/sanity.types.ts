@@ -127,6 +127,52 @@ export type Button = {
   link?: Link
 }
 
+export type News = {
+  _id: string
+  _type: 'news'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  tag: '\u62DB\u751F' | '\u885D\u523A' | '\u516C\u544A' | '\u6D3B\u52D5'
+  date: string
+  coverImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  excerpt?: string
+  body?: BlockContent
+  ctaLabel?: string
+  ctaHref?: string
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
 export type HeroSlide = {
   _id: string
   _type: 'heroSlide'
@@ -161,22 +207,6 @@ export type HeroSlide = {
   }
   order: number
   enabled?: boolean
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type Settings = {
@@ -284,12 +314,6 @@ export type Person = {
     alt?: string
     _type: 'image'
   }
-}
-
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
 }
 
 export type SanityAssistInstructionTask = {
@@ -536,15 +560,16 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
-  | HeroSlide
+  | News
   | SanityImageCrop
   | SanityImageHotspot
+  | Slug
+  | HeroSlide
   | Settings
   | Page
   | PersonReference
   | Post
   | Person
-  | Slug
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -598,6 +623,29 @@ export type HeroSlidesQueryResult = Array<{
     label?: string
     href?: string
   } | null
+}>
+
+// Source: sanity/lib/queries.news.ts
+// Variable: latestNewsQuery
+// Query: *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(date desc) [0...$limit] {    _id,    title,    "slug": slug.current,    tag,    date,    coverImage,    excerpt,    body,    ctaLabel,    ctaHref  }
+export type LatestNewsQueryResult = Array<{
+  _id: string
+  title: string
+  slug: string
+  tag: '\u516C\u544A' | '\u62DB\u751F' | '\u6D3B\u52D5' | '\u885D\u523A'
+  date: string
+  coverImage: {
+    asset: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  excerpt: string | null
+  body: BlockContent | null
+  ctaLabel: string | null
+  ctaHref: string | null
 }>
 
 // Source: sanity/lib/queries.ts
@@ -888,6 +936,7 @@ import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[_type == "heroSlide" && enabled != false && defined(image.asset)] | order(order asc, _createdAt asc) {\n    _id,\n    title,\n    subtitle,\n    eyebrow,\n    image,\n    mobileImage,\n    primaryAction,\n    secondaryAction\n  }\n': HeroSlidesQueryResult
+    '\n  *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(date desc) [0...$limit] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    date,\n    coverImage,\n    excerpt,\n    body,\n    ctaLabel,\n    ctaHref\n  }\n': LatestNewsQueryResult
     '*[_type == "settings"][0]': SettingsQueryResult
     '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult
     '\n  *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult

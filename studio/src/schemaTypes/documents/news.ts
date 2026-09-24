@@ -90,6 +90,7 @@ export const news = defineType({
       name: 'ctaLabel',
       title: '彈窗按鈕文字',
       type: 'string',
+      description: '需搭配下方「彈窗按鈕連結」，兩個都填才會顯示按鈕。',
       initialValue: '電話報名／諮詢',
     }),
     defineField({
@@ -97,6 +98,12 @@ export const news = defineType({
       title: '彈窗按鈕連結',
       type: 'string',
       description: '例如 tel:0400000000 或 /courses。留空則不顯示按鈕。',
+      validation: (rule) =>
+        rule.custom((href, context) => {
+          const label = (context.document as News | undefined)?.ctaLabel
+          if (label && !href) return '已填按鈕文字但沒有連結，彈窗不會顯示按鈕。'
+          return true
+        }).warning(),
     }),
   ],
   orderings: [

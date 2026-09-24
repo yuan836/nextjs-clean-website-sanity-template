@@ -2,7 +2,8 @@ import type {NextConfig} from 'next'
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [new URL('https://cdn.sanity.io/**')],
+    // Object form (not `new URL()`): a URL object carries `search: ''`, which rejects Sanity's ?w=&h= params.
+    remotePatterns: [{protocol: 'https', hostname: 'cdn.sanity.io', pathname: '/**'}],
   },
 }
 
