@@ -2754,6 +2754,13 @@
         },
         "optional": true
       },
+      "mapCenter": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "mapImage": {
         "type": "objectAttribute",
         "value": {
