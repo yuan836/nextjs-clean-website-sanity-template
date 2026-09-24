@@ -3,6 +3,7 @@ import {page} from './documents/page'
 import {post} from './documents/post'
 import {heroSlide} from './documents/heroSlide'
 import {news} from './documents/news'
+import {course} from './documents/course'
 import {callToAction} from './objects/callToAction'
 import {infoSection} from './objects/infoSection'
 import {settings} from './singletons/settings'
@@ -22,6 +23,7 @@ export const schemaTypes = [
   person,
   heroSlide,
   news,
+  course,
   // Objects
   button,
   blockContent,
