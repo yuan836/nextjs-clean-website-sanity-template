@@ -135,6 +135,8 @@ export type Album = {
   _rev: string
   title: string
   date: string
+  pinned?: boolean
+  pinOrder?: number
   photos?: Array<{
     asset?: SanityImageAssetReference
     media?: unknown
@@ -245,6 +247,8 @@ export type News = {
   slug: Slug
   tag: '\u62DB\u751F' | '\u885D\u523A' | '\u516C\u544A' | '\u6D3B\u52D5'
   date: string
+  pinned?: boolean
+  pinOrder?: number
   coverImage: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -855,7 +859,7 @@ export type AlbumsQueryResult = Array<{
 
 // Source: sanity/lib/queries.album.ts
 // Variable: homeAlbumPeekQuery
-// Query: *[_type == "album" && showOnHome != false && count(photos) > 0] | order(date desc) [0...3] {    _id,    title,    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }  }
+// Query: *[_type == "album" && showOnHome != false && count(photos) > 0] | order(coalesce(pinned, false) desc, pinOrder asc, date desc) [0...3] {    _id,    title,    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }  }
 export type HomeAlbumPeekQueryResult = Array<{
   _id: string
   title: string
@@ -987,7 +991,7 @@ export type HomePageQueryResult = {
 
 // Source: sanity/lib/queries.news.ts
 // Variable: latestNewsQuery
-// Query: *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(date desc) [0...$limit] {    _id,    title,    "slug": slug.current,    tag,    date,    coverImage,    excerpt,    body,    ctaLabel,    ctaHref  }
+// Query: *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(coalesce(pinned, false) desc, pinOrder asc, date desc) [0...$limit] {    _id,    title,    "slug": slug.current,    tag,    date,    coverImage,    excerpt,    body,    ctaLabel,    ctaHref  }
 export type LatestNewsQueryResult = Array<{
   _id: string
   title: string
@@ -1324,12 +1328,12 @@ declare module '@sanity/client' {
     '\n  *[_type == "aboutPage" && _id == "aboutPage"][0] {\n    title,\n    heroImage,\n    philosophy,\n    features[] { _key, title, body },\n    facilities[] { _key, title, body, image }\n  }\n': AboutPageQueryResult
     '\n  *[_type == "teacher"] | order(order asc, name asc) {\n    _id,\n    name,\n    subject,\n    photo,\n    credential,\n    years,\n    philosophy,\n    "classes": classes[]->name,\n    experience\n  }\n': TeachersQueryResult
     '\n  *[_type == "album" && count(photos) > 0] | order(date desc) {\n    _id,\n    title,\n    date,\n    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }\n  }\n': AlbumsQueryResult
-    '\n  *[_type == "album" && showOnHome != false && count(photos) > 0] | order(date desc) [0...3] {\n    _id,\n    title,\n    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }\n  }\n': HomeAlbumPeekQueryResult
+    '\n  *[_type == "album" && showOnHome != false && count(photos) > 0] | order(coalesce(pinned, false) desc, pinOrder asc, date desc) [0...3] {\n    _id,\n    title,\n    "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }\n  }\n': HomeAlbumPeekQueryResult
     '\n  *[_type == "course" && defined(slug.current)] | order(order asc, name asc) {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': AllCoursesQueryResult
     '\n  *[_type == "course" && featured == true && defined(slug.current)] | order(order asc) [0...$limit] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': FeaturedCoursesQueryResult
     '\n  *[_type == "heroSlide" && enabled != false && defined(image.asset)] | order(order asc, _createdAt asc) {\n    _id,\n    title,\n    subtitle,\n    eyebrow,\n    image,\n    mobileImage,\n    primaryAction,\n    secondaryAction\n  }\n': HeroSlidesQueryResult
     '\n  *[_type == "homePage" && _id == "homePage"][0] {\n    resultsTitle,\n    resultsNote,\n    resultsCaption,\n    "schools": schools[] { _key, name, count },\n    teaserHeading,\n    teaserBody,\n    teaserImage,\n    teaserButton,\n    newsLimit,\n    coursesLimit,\n    albumLimit,\n    showResults\n  }\n': HomePageQueryResult
-    '\n  *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(date desc) [0...$limit] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    date,\n    coverImage,\n    excerpt,\n    body,\n    ctaLabel,\n    ctaHref\n  }\n': LatestNewsQueryResult
+    '\n  *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(coalesce(pinned, false) desc, pinOrder asc, date desc) [0...$limit] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    date,\n    coverImage,\n    excerpt,\n    body,\n    ctaLabel,\n    ctaHref\n  }\n': LatestNewsQueryResult
     '*[_type == "settings"][0]': SettingsQueryResult
     '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult
     '\n  *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
