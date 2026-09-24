@@ -227,11 +227,18 @@ export const settings = defineType({
       description: '例如「週一至週六 13:00–21:30／週日休」。',
     }),
     defineField({
+      name: 'mapQuery',
+      title: '地圖定位',
+      type: 'string',
+      group: 'contact',
+      description: '嵌入 Google 地圖要搜尋的地點，例如店家名稱或完整地址。留空會用上面的「地址」。',
+    }),
+    defineField({
       name: 'mapImage',
       title: '地圖圖片',
       type: 'image',
       group: 'contact',
-      description: '地圖截圖；之後可改成嵌入 Google 地圖。',
+      description: '備用：沒有地址也沒有地圖定位時才會顯示這張圖。',
       options: {hotspot: true},
       fields: [{name: 'alt', type: 'string', title: '替代文字'}],
     }),
@@ -240,7 +247,7 @@ export const settings = defineType({
       title: 'Google 地圖連結',
       type: 'url',
       group: 'contact',
-      description: '有填的話點地圖會開啟導航。',
+      description: '有填的話地圖下方會出現「在 Google 地圖開啟」按鈕。',
     }),
 
     // ---- 底部諮詢條 ----
