@@ -1,6 +1,6 @@
 import {sanityFetch} from '@/sanity/lib/live'
 import {urlForImage} from '@/sanity/lib/utils'
-import {heroSlidesQuery} from '@/sanity/lib/queries'
+import {heroSlidesQuery} from '@/sanity/lib/queries.hero'
 import HeroCarousel, {type HeroSlideView} from './HeroCarousel'
 
 /**
