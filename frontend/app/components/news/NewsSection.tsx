@@ -1,3 +1,4 @@
+import type {PortableTextBlock} from 'next-sanity'
 import {sanityFetch} from '@/sanity/lib/live'
 import {latestNewsQuery} from '@/sanity/lib/queries.news'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -9,7 +10,7 @@ export default async function NewsSection({limit = 3}: {limit?: number}) {
   const {data} = await sanityFetch({query: latestNewsQuery, params: {limit}})
   if (!data?.length) return null
 
-  const items: NewsView[] = data.map((n: any) => ({
+  const items: NewsView[] = data.map((n) => ({
     _id: n._id,
     slug: n.slug,
     title: n.title,
@@ -18,7 +19,7 @@ export default async function NewsSection({limit = 3}: {limit?: number}) {
     imageUrl: urlForImage(n.coverImage)?.width(1200).height(675).fit('crop').auto('format').url() ?? '',
     imageAlt: n.coverImage?.alt ?? n.title ?? '',
     excerpt: n.excerpt,
-    body: n.body,
+    body: n.body as PortableTextBlock[] | null,
     ctaLabel: n.ctaLabel,
     ctaHref: n.ctaHref,
   }))

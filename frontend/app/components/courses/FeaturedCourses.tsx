@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import {sanityFetch} from '@/sanity/lib/live'
-import {featuredCoursesQuery} from '@/sanity/lib/queries'
+import {featuredCoursesQuery} from '@/sanity/lib/queries.course'
 import CourseGrid from './CourseGrid'
 import {toCourseView} from './toCourseView'
 

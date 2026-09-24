@@ -1,6 +1,6 @@
 import type {Metadata} from 'next'
 import {sanityFetch} from '@/sanity/lib/live'
-import {allCoursesQuery} from '@/sanity/lib/queries'
+import {allCoursesQuery} from '@/sanity/lib/queries.course'
 import CourseGrid from '@/app/components/courses/CourseGrid'
 import {toCourseView} from '@/app/components/courses/toCourseView'
 

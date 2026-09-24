@@ -127,17 +127,17 @@ export type Button = {
   link?: Link
 }
 
-export type News = {
+export type Course = {
   _id: string
-  _type: 'news'
+  _type: 'course'
   _createdAt: string
   _updatedAt: string
   _rev: string
-  title: string
+  name: string
   slug: Slug
-  tag: '\u62DB\u751F' | '\u885D\u523A' | '\u516C\u544A' | '\u6D3B\u52D5'
-  date: string
-  coverImage: {
+  level: 'elementary' | 'junior' | 'senior'
+  subject: 'chinese' | 'english' | 'math' | 'science' | 'social'
+  image?: {
     asset?: SanityImageAssetReference
     media?: unknown
     hotspot?: SanityImageHotspot
@@ -145,8 +145,14 @@ export type News = {
     alt?: string
     _type: 'image'
   }
-  excerpt?: string
-  body?: BlockContent
+  summary?: string
+  schedule?: string
+  classSize?: string
+  duration?: string
+  term?: string
+  outline?: Array<string>
+  featured?: boolean
+  order?: number
   ctaLabel?: string
   ctaHref?: string
 }
@@ -171,6 +177,30 @@ export type Slug = {
   _type: 'slug'
   current: string
   source?: string
+}
+
+export type News = {
+  _id: string
+  _type: 'news'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  tag: '\u62DB\u751F' | '\u885D\u523A' | '\u516C\u544A' | '\u6D3B\u52D5'
+  date: string
+  coverImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  excerpt?: string
+  body?: BlockContent
+  ctaLabel?: string
+  ctaHref?: string
 }
 
 export type HeroSlide = {
@@ -560,10 +590,11 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
-  | News
+  | Course
   | SanityImageCrop
   | SanityImageHotspot
   | Slug
+  | News
   | HeroSlide
   | Settings
   | Page
@@ -591,6 +622,60 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
+
+// Source: sanity/lib/queries.course.ts
+// Variable: allCoursesQuery
+// Query: *[_type == "course" && defined(slug.current)] | order(order asc, name asc) {      _id,  name,  "slug": slug.current,  level,  subject,  image,  summary,  schedule,  classSize,  duration,  term,  outline,  ctaLabel,  ctaHref  }
+export type AllCoursesQueryResult = Array<{
+  _id: string
+  name: string
+  slug: string
+  level: 'elementary' | 'junior' | 'senior'
+  subject: 'chinese' | 'english' | 'math' | 'science' | 'social'
+  image: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  summary: string | null
+  schedule: string | null
+  classSize: string | null
+  duration: string | null
+  term: string | null
+  outline: Array<string> | null
+  ctaLabel: string | null
+  ctaHref: string | null
+}>
+
+// Source: sanity/lib/queries.course.ts
+// Variable: featuredCoursesQuery
+// Query: *[_type == "course" && featured == true && defined(slug.current)] | order(order asc) [0...$limit] {      _id,  name,  "slug": slug.current,  level,  subject,  image,  summary,  schedule,  classSize,  duration,  term,  outline,  ctaLabel,  ctaHref  }
+export type FeaturedCoursesQueryResult = Array<{
+  _id: string
+  name: string
+  slug: string
+  level: 'elementary' | 'junior' | 'senior'
+  subject: 'chinese' | 'english' | 'math' | 'science' | 'social'
+  image: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  summary: string | null
+  schedule: string | null
+  classSize: string | null
+  duration: string | null
+  term: string | null
+  outline: Array<string> | null
+  ctaLabel: string | null
+  ctaHref: string | null
+}>
 
 // Source: sanity/lib/queries.hero.ts
 // Variable: heroSlidesQuery
@@ -935,6 +1020,8 @@ export type PagesSlugsResult = Array<{
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
+    '\n  *[_type == "course" && defined(slug.current)] | order(order asc, name asc) {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': AllCoursesQueryResult
+    '\n  *[_type == "course" && featured == true && defined(slug.current)] | order(order asc) [0...$limit] {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  level,\n  subject,\n  image,\n  summary,\n  schedule,\n  classSize,\n  duration,\n  term,\n  outline,\n  ctaLabel,\n  ctaHref\n\n  }\n': FeaturedCoursesQueryResult
     '\n  *[_type == "heroSlide" && enabled != false && defined(image.asset)] | order(order asc, _createdAt asc) {\n    _id,\n    title,\n    subtitle,\n    eyebrow,\n    image,\n    mobileImage,\n    primaryAction,\n    secondaryAction\n  }\n': HeroSlidesQueryResult
     '\n  *[_type == "news" && defined(slug.current) && defined(coverImage.asset)] | order(date desc) [0...$limit] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    date,\n    coverImage,\n    excerpt,\n    body,\n    ctaLabel,\n    ctaHref\n  }\n': LatestNewsQueryResult
     '*[_type == "settings"][0]': SettingsQueryResult
