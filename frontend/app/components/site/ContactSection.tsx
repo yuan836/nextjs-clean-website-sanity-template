@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import {stegaClean} from '@sanity/client/stega'
 import {sanityFetch} from '@/sanity/lib/live'
 import {settingsQuery} from '@/sanity/lib/queries'
 import {urlForImage} from '@/sanity/lib/utils'
@@ -17,14 +18,28 @@ export default async function ContactSection() {
     {label: '營業時間', value: s.hours},
   ].filter((r) => r.value)
 
-  const mapUrl = s.mapImage?.asset
+  // Draft mode embeds invisible stega markers in strings; strip them before building a URL.
+  const mapQuery = stegaClean(s.mapQuery || s.address)
+  const embedUrl = mapQuery
+    ? `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=16&hl=zh-TW&output=embed`
+    : null
+  const imageUrl = s.mapImage?.asset
     ? urlForImage(s.mapImage)?.width(1200).height(800).fit('crop').auto('format').url()
     : null
 
   const map = (
     <div className="relative h-full min-h-[320px] overflow-hidden rounded-lg bg-gray-200 shadow-sm">
-      {mapUrl ? (
-        <Image src={mapUrl} alt={s.mapImage?.alt ?? '校區位置地圖'} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
+      {embedUrl ? (
+        <iframe
+          src={embedUrl}
+          title="校區位置地圖"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full border-0"
+        />
+      ) : imageUrl ? (
+        <Image src={imageUrl} alt={s.mapImage?.alt ?? '校區位置地圖'} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
       ) : (
         <span className="absolute inset-0 flex items-center justify-center text-sm text-gray-500">地圖</span>
       )}
@@ -60,14 +75,18 @@ export default async function ContactSection() {
             ) : null}
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-3">
+          <div className="flex-1">{map}</div>
           {s.mapUrl ? (
-            <a href={s.mapUrl} target="_blank" rel="noopener noreferrer" className="flex-1" aria-label="在 Google 地圖開啟">
-              {map}
+            <a
+              href={s.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="self-end text-sm font-medium text-blue-700 hover:text-blue-800"
+            >
+              在 Google 地圖開啟 →
             </a>
-          ) : (
-            <div className="flex-1">{map}</div>
-          )}
+          ) : null}
         </div>
       </div>
     </section>

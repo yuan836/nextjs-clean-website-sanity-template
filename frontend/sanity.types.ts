@@ -422,6 +422,7 @@ export type Settings = {
   lineId?: string
   lineUrl?: string
   hours?: string
+  mapQuery?: string
   mapImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -1068,6 +1069,7 @@ export type SettingsQueryResult = {
   lineId?: string
   lineUrl?: string
   hours?: string
+  mapQuery?: string
   mapImage?: {
     asset?: SanityImageAssetReference
     media?: unknown

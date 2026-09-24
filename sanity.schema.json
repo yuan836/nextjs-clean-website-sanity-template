@@ -2747,6 +2747,13 @@
         },
         "optional": true
       },
+      "mapQuery": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "mapImage": {
         "type": "objectAttribute",
         "value": {
