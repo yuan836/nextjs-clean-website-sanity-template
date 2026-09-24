@@ -333,6 +333,38 @@ export type AboutPage = {
   }>
 }
 
+export type HomePage = {
+  _id: string
+  _type: 'homePage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  resultsTitle?: string
+  resultsNote?: string
+  schools?: Array<{
+    name: string
+    count: number
+    _type: 'schoolResult'
+    _key: string
+  }>
+  resultsCaption?: string
+  teaserHeading?: string
+  teaserBody?: string
+  teaserImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  teaserButton?: string
+  newsLimit?: number
+  coursesLimit?: number
+  albumLimit?: number
+  showResults?: boolean
+}
+
 export type Settings = {
   _id: string
   _type: 'settings'
@@ -720,6 +752,7 @@ export type AllSanitySchemaTypes =
   | News
   | HeroSlide
   | AboutPage
+  | HomePage
   | Settings
   | Page
   | PersonReference

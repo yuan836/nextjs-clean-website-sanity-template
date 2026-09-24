@@ -1,4 +1,4 @@
-import {CogIcon, InfoOutlineIcon} from '@sanity/icons'
+import {CogIcon, HomeIcon, InfoOutlineIcon} from '@sanity/icons'
 import type {StructureBuilder, StructureResolver} from 'sanity/structure'
 import pluralize from 'pluralize-esm'
 
@@ -8,12 +8,22 @@ import pluralize from 'pluralize-esm'
  * Learn more: https://www.sanity.io/docs/structure-builder-introduction
  */
 
-const DISABLED_TYPES = ['settings', 'aboutPage', 'assist.instruction.context']
+const DISABLED_TYPES = ['settings', 'homePage', 'aboutPage', 'assist.instruction.context']
 
 export const structure: StructureResolver = (S: StructureBuilder) =>
   S.list()
     .title('Website Content')
     .items([
+      // Page singletons first: each always edits one fixed document
+      S.listItem()
+        .title('Home Page')
+        .child(S.document().schemaType('homePage').documentId('homePage'))
+        .icon(HomeIcon),
+      S.listItem()
+        .title('About Page')
+        .child(S.document().schemaType('aboutPage').documentId('aboutPage'))
+        .icon(InfoOutlineIcon),
+      S.divider(),
       ...S.documentTypeListItems()
         // Remove singletons and "assist.instruction.context" from the list of content types
         .filter((listItem: any) => !DISABLED_TYPES.includes(listItem.getId()))
@@ -22,11 +32,6 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
           return listItem.title(pluralize(listItem.getTitle() as string))
         }),
       S.divider(),
-      // About page singleton: always edits the one document with id "aboutPage"
-      S.listItem()
-        .title('About Page')
-        .child(S.document().schemaType('aboutPage').documentId('aboutPage'))
-        .icon(InfoOutlineIcon),
       // Settings Singleton in order to view/edit the one particular document for Settings.  Learn more about Singletons: https://www.sanity.io/docs/create-a-link-to-a-single-edit-page-in-your-main-document-type-list
       S.listItem()
         .title('Site Settings')

@@ -10,7 +10,7 @@ export const albumsQuery = defineQuery(`
 `)
 
 export const homeAlbumPeekQuery = defineQuery(`
-  *[_type == "album" && showOnHome != false && count(photos) > 0] | order(date desc) [0...3] {
+  *[_type == "album" && showOnHome != false && count(photos) > 0] | order(coalesce(pinned, false) desc, pinOrder asc, date desc) [0...3] {
     _id,
     title,
     "photos": photos[defined(asset)] { _key, asset, hotspot, crop, alt, caption }
