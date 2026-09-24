@@ -1,0 +1,27 @@
+/* 貼到 frontend/app/globals.css 最後面 */
+
+@keyframes hdr-scan {
+  0% {
+    transform: translateX(-40%);
+  }
+  100% {
+    transform: translateX(140%);
+  }
+}
+
+@keyframes hdr-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe-scan,
+  .motion-safe-pulse {
+    animation: none !important;
+  }
+}
