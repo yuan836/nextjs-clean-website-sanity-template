@@ -1,9 +1,5 @@
-import type {AllCoursesQueryResult} from '@/sanity.types'
 import {urlForImage} from '@/sanity/lib/utils'
-import type {CourseView} from './types'
-
-// allCoursesQuery and featuredCoursesQuery share the same projection, so one row type covers both.
-type CourseRow = AllCoursesQueryResult[number]
+import type {CourseRow, CourseView} from './types'
 
 /** Maps a raw course query result to the plain shape client components use. */
 export function toCourseView(c: CourseRow): CourseView {
