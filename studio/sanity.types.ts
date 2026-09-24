@@ -135,6 +135,8 @@ export type Album = {
   _rev: string
   title: string
   date: string
+  pinned?: boolean
+  pinOrder?: number
   photos?: Array<{
     asset?: SanityImageAssetReference
     media?: unknown
@@ -245,6 +247,8 @@ export type News = {
   slug: Slug
   tag: '\u62DB\u751F' | '\u885D\u523A' | '\u516C\u544A' | '\u6D3B\u52D5'
   date: string
+  pinned?: boolean
+  pinOrder?: number
   coverImage: {
     asset?: SanityImageAssetReference
     media?: unknown

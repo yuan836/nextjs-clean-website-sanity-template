@@ -862,6 +862,20 @@
         },
         "optional": false
       },
+      "pinned": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
+      "pinOrder": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": true
+      },
       "photos": {
         "type": "objectAttribute",
         "value": {
@@ -1569,6 +1583,20 @@
           "type": "string"
         },
         "optional": false
+      },
+      "pinned": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
+      "pinOrder": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": true
       },
       "coverImage": {
         "type": "objectAttribute",
